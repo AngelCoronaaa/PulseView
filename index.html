@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PulseWeb — Visor VCD</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="toolbar">
+    <button id="btnSidebar" class="icon" title="Mostrar/ocultar panel de señales">☰</button>
+    <div class="brand"><span class="logo">⎍</span> PulseWeb</div>
+
+    <div class="group">
+      <button id="btnOpen" class="primary" title="Abrir archivo .vcd (Ctrl+O)">Abrir .vcd</button>
+      <button id="btnDemo" title="Cargar señales de ejemplo">Demo</button>
+      <input id="fileInput" type="file" accept=".vcd,.VCD,text/plain" hidden>
+    </div>
+
+    <div class="group">
+      <button id="btnZoomIn" class="icon" title="Acercar (+)">＋</button>
+      <button id="btnZoomOut" class="icon" title="Alejar (−)">−</button>
+      <button id="btnFit" title="Ajustar todo (F)">Ajustar</button>
+      <button id="btnZoomAB" title="Zoom entre cursores A y B (Z)">Zoom A–B</button>
+    </div>
+
+    <div class="group">
+      <button id="btnClear" title="Quitar cursores (Esc)">Quitar cursores</button>
+      <label class="check" title="Los cursores se pegan al flanco más cercano de la señal bajo el ratón">
+        <input id="snap" type="checkbox" checked> Ajustar a flancos
+      </label>
+    </div>
+
+    <div class="spacer"></div>
+    <div id="fileInfo" class="file-info"></div>
+    <button id="btnHelp" class="icon" title="Ayuda (?)">?</button>
+  </header>
+
+  <main class="layout" id="layout">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <input id="search" type="search" placeholder="Buscar señal…" autocomplete="off">
+        <div class="sidebar-actions">
+          <button id="btnShowAll">Mostrar todas</button>
+          <button id="btnHideAll">Ocultar todas</button>
+        </div>
+      </div>
+      <div id="tree" class="tree"><p class="muted pad">Sin archivo cargado.</p></div>
+    </aside>
+
+    <section class="viewer">
+      <div class="ruler-row">
+        <div class="names-header" id="namesHeader">Señales</div>
+        <canvas id="ruler"></canvas>
+      </div>
+      <div class="rows-scroll" id="rowsScroll">
+        <div class="rows-inner">
+          <div class="names" id="names"></div>
+          <div class="wave-col" id="waveCol"><canvas id="wave"></canvas></div>
+        </div>
+      </div>
+
+      <div class="empty" id="empty">
+        <div class="drop-card">
+          <div class="drop-icon">⎍⎍⎍</div>
+          <h2>Arrastra un archivo <code>.vcd</code> aquí</h2>
+          <p class="muted">o</p>
+          <div class="row-btns">
+            <button class="primary" data-action="open">Abrir archivo</button>
+            <button data-action="demo">Ver demo</button>
+          </div>
+          <p class="muted small">Todo se procesa en tu navegador; el archivo no se sube a ningún servidor.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span>Ratón: <b id="stHover">—</b></span>
+    <span class="cA">A: <b id="stA">—</b></span>
+    <span class="cB">B: <b id="stB">—</b></span>
+    <span>Δ: <b id="stDelta">—</b></span>
+    <span>1/Δ: <b id="stFreq">—</b></span>
+    <span class="spacer"></span>
+    <span>Ventana: <b id="stZoom">—</b></span>
+  </footer>
+
+  <div id="dropOverlay" class="drop-overlay"><div>Suelta el archivo .vcd</div></div>
+  <div id="tooltip" class="tooltip"></div>
+  <div id="toast" class="toast"></div>
+
+  <dialog id="help">
+    <h3>Controles</h3>
+    <table>
+      <tr><td>Rueda del ratón</td><td>Zoom centrado en el puntero</td></tr>
+      <tr><td>Shift + rueda / arrastrar</td><td>Desplazar en el tiempo</td></tr>
+      <tr><td>Clic</td><td>Colocar cursor A</td></tr>
+      <tr><td>Shift + clic / clic derecho</td><td>Colocar cursor B</td></tr>
+      <tr><td>Arrastrar un cursor</td><td>Moverlo</td></tr>
+      <tr><td><kbd>+</kbd> / <kbd>−</kbd></td><td>Acercar / alejar</td></tr>
+      <tr><td><kbd>F</kbd></td><td>Ajustar toda la captura</td></tr>
+      <tr><td><kbd>Z</kbd></td><td>Zoom entre cursores A y B</td></tr>
+      <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Desplazar</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Quitar cursores</td></tr>
+      <tr><td>Arrastrar nombre de señal</td><td>Reordenar</td></tr>
+      <tr><td>Clic en el color</td><td>Cambiar color</td></tr>
+      <tr><td>Botón HEX/DEC/…</td><td>Cambiar base de un bus</td></tr>
+    </table>
+    <p class="muted small">Pasa el ratón sobre una señal para ver ancho de pulso, periodo, frecuencia y ciclo útil.</p>
+    <form method="dialog"><button class="primary">Cerrar</button></form>
+  </dialog>
+
+  <script src="js/vcd.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
